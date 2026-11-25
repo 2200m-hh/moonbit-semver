@@ -47,3 +47,28 @@ test "SemVer prerelease precedence" {
   assert_eq(@moonbit-semver.compare(must_parse("1.0.0-beta.2"), must_parse("1.0.0-beta.11")), -1)
   assert_eq(@moonbit-semver.compare(must_parse("1.0.0-rc.1"), must_parse("1.0.0")), -1)
 }
+
+test "validity helper and build metadata leading zeros" {
+  assert_true(@moonbit-semver.is_valid("1.2.3"))
+  assert_true(@moonbit-semver.is_valid("1.0.0+01"))
+  assert_false(@moonbit-semver.is_valid("01.2.3"))
+  assert_false(@moonbit-semver.is_valid("1.0.0-alpha.01"))
+  assert_false(@moonbit-semver.is_valid("1.0.0-α"))
+}
+
+test "compare_text reports the offending side" {
+  assert_eq(@moonbit-semver.compare_text("1.0.0-alpha", "1.0.0").unwrap(), -1)
+  assert_true(@moonbit-semver.compare_text("bad", "1.0.0") is Err(_))
+  assert_true(@moonbit-semver.compare_text("1.0.0", "bad") is Err(_))
+}
+
+test "large numeric identifiers keep precedence" {
+  assert_true(@moonbit-semver.is_valid("999999999999999999999.1.1"))
+  assert_eq(
+    @moonbit-semver.compare_text(
+      "999999999999999999999.0.0",
+      "1000000000000000000000.0.0",
+    ).unwrap(),
+    -1,
+  )
+}

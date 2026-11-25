@@ -239,3 +239,25 @@ pub fn to_string(v : Version) -> String {
   }
   out
 }
+
+/// Return true when the input is a valid SemVer 2.0.0 version string.
+pub fn is_valid(text : String) -> Bool {
+  match parse(text) {
+    Ok(_) => true
+    Err(_) => false
+  }
+}
+
+/// Parse two version strings and compare them directly.
+/// Returns an error that names the offending side when either input is invalid.
+pub fn compare_text(a : String, b : String) -> Result[Int, String] {
+  let av = match parse(a) {
+    Ok(v) => v
+    Err(e) => return Err("left: " + e)
+  }
+  let bv = match parse(b) {
+    Ok(v) => v
+    Err(e) => return Err("right: " + e)
+  }
+  Ok(compare(av, bv))
+}
