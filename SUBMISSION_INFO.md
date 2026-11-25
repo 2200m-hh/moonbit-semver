@@ -25,11 +25,11 @@
 
    ```bash
    cd /e/WorkBuddy/moonbit-semver
-   git remote add origin https://github.com/你的GitHubID/moonbit-semver.git
+   git remote add origin https://github.com/2200m-hh/moonbit-semver.git
    git push -u origin main
    ```
 
-3. 推送前替换占位 ID：`moon.mod` 的 `repository`，以及 `README.md` 里的 `your-github-id`。**建议同时把 `moon.mod` 的 `name = "hackathon/moonbit-semver"` 中的 `hackathon` 改成你的真实 GitHub ID**——若改了 `name`，必须同步改 `src/cmd/moon.pkg` 里的 `import { "hackathon/moonbit-semver" @semver }`，然后跑一次 `moon check` 确认通过。
+3. 占位 ID 已在 `moon.mod`（`name` / `repository`）、`README.md`、`src/cmd/moon.pkg` 中填入 `2200m-hh`，并已通过 `moon check` 验证。若换账号使用，需同步改这三处。
 4. 打开飞书报名表，填入：姓名、GitHub ID、公开仓库地址、一页项目说明（直接用 `PROJECT_PROPOSAL.md` 的内容）。
 5. 加入赛事微信群，**把群昵称改成你的 GitHub ID**。官网明确写：不改昵称会影响奖金发放。
 6. 在 GitHub 仓库里创建 2 个 Issue（模板已放在 `.github/ISSUE_TEMPLATE/`），再从 main 建一个分支做一个小改进并提交 PR，保留 review 与合并记录。本地已有一条 `--no-ff` 合并记录，但 GitHub 上需要真实的 PR 对象来对应赛事「保留 PR」的要求。

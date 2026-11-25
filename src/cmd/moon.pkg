@@ -1,6 +1,6 @@
 pkgtype(kind: "executable")
 
 import {
-  "hackathon/moonbit-semver" @semver,
+  "2200m-hh/moonbit-semver" @semver,
   "moonbitlang/core/argparse" @argparse,
 }
