@@ -39,13 +39,13 @@
 
 - 赛事明确允许 AI 参与代码生成、接口设计、测试和文档；但参赛者必须能解释技术选择并对质量负责。作品已附 `AI_USAGE.md`，审核时可直接提交。
 - 验收标准：MoonBit 为主、仓库公开、有 README/可运行示例/测试、开源合规、AI 可解释。本项目全部满足。
-- 已有 6 个连续提交，开发轨迹可追踪。
+- 已有连续提交与一次独立分支的加固合并，开发轨迹可追踪。
 - 奖金涉及实名与收款，必须由你本人完成，我无法代做。
 
 ## 4. 本地验证结果（已完成）
 
 ```text
 moon check                 → Finished, 0 errors
-moon test --target js      → Total tests: 5, passed: 5, failed: 0
-moon run src/cmd --target js → 演示输出符合 SemVer 2.0.0
+moon test --target js      → Total tests: 8, passed: 8, failed: 0
+moon run src/cmd --target js -- 1.0.0-beta.2 1.0.0-beta.11 → 输出符合 SemVer 2.0.0
 ```

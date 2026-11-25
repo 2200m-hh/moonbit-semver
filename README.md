@@ -10,7 +10,7 @@
 - 校验数字标识符无前导零，预发布标识符字符集合法。
 - 按 SemVer 2.0.0 规则比较优先级：主版本/次版本/修订号逐项比较，预发布版本低于正式版本，数字标识符按数值比较，字母数字标识符按字典序比较。
 - 保留 build metadata，但按规范在比较时忽略它。
-- 提供可运行 demo 与 5 组测试。
+- 提供可传参的 CLI demo、8 组测试与 GitHub Actions CI。
 
 ## 目录结构
 
@@ -22,18 +22,22 @@ moonbit-semver/
 ├── AI_USAGE.md               # AI 使用说明（赛事验收项）
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
+├── DEVELOPMENT_LOG.md        # 开发过程记录
+├── SUBMISSION_INFO.md        # 报名与领奖操作卡
 ├── LICENSE                   # MIT
 ├── src/
 │   ├── moon.pkg              # 库包
 │   ├── version.mbt           # 核心实现
 │   ├── version_test.mbt      # 测试
 │   └── cmd/
-│       ├── moon.pkg          # 可执行 demo
+│       ├── moon.pkg          # 可执行 CLI
 │       └── main.mbt
 └── .github/
-    └── ISSUE_TEMPLATE/
-        ├── bug_report.md
-        └── feature_request.md
+    ├── ISSUE_TEMPLATE/
+    │   ├── bug_report.md
+    │   └── feature_request.md
+    └── workflows/
+        └── ci.yml
 ```
 
 ## 本地验证
@@ -42,22 +46,20 @@ moonbit-semver/
 
 ```bash
 moon check                 # 类型检查
-moon test --target js      # 运行测试（5 passed）
+moon test --target js      # 运行测试（8 passed）
 moon run src/cmd --target js
+moon run src/cmd --target js -- 1.0.0-beta.2 1.0.0-beta.11
 ```
 
 > 说明：在部分受限环境中 Wasm 测试运行器可能缺少运行库，此时用 `--target js` 走 Node.js 后端即可正常执行；这不改变代码本身。
 
-预期演示输出：
+CLI 支持两个位置参数，缺省时演示 `1.0.0-alpha < 1.0.0`；也支持 `--help` 与 `--version`。
+
+预期输出：
 
 ```
-moonbit-semver demo
--------------------
 1.0.0-alpha  <  1.0.0
-1.0.0-alpha.1  <  1.0.0-alpha.beta
 1.0.0-beta.2  <  1.0.0-beta.11
-1.0.0+build.1  ==  1.0.0+build.2
-parsed: 2.3.4-rc.1+sha.abc123
 ```
 
 ## API 示例
@@ -69,6 +71,9 @@ println(@moonbit-semver.to_string(v))
 let a = @moonbit-semver.parse("1.0.0-beta.2").unwrap()
 let b = @moonbit-semver.parse("1.0.0-beta.11").unwrap()
 println(@moonbit-semver.compare(a, b)) // -1
+
+println(@moonbit-semver.is_valid("1.0.0+01")) // true
+println(@moonbit-semver.compare_text("1.0.0-alpha", "1.0.0")) // Ok(-1)
 ```
 
 核心 API：
@@ -78,6 +83,8 @@ println(@moonbit-semver.compare(a, b)) // -1
 | `parse(String) -> Result[Version, String]` | 解析版本字符串，失败时返回可读错误 |
 | `compare(Version, Version) -> Int` | 返回 `-1 / 0 / 1`，分别表示小于/等于/大于 |
 | `to_string(Version) -> String` | 输出规范化版本字符串 |
+| `is_valid(String) -> Bool` | 快速判断输入是否为合法 SemVer 2.0.0 |
+| `compare_text(String, String) -> Result[Int, String]` | 直接比较字符串，错误会标明是哪一侧非法 |
 
 数据类型：
 

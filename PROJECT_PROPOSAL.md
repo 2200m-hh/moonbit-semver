@@ -25,7 +25,9 @@ MoonBit 生态在分发工具链、包和示例时，需要一个可靠、无依
 | --- | --- |
 | 核心库 | `src/version.mbt` |
 | 测试 | `src/version_test.mbt` |
-| 可运行 demo | `src/cmd/main.mbt` |
+| 可传参 CLI | `src/cmd/main.mbt` |
+| CI 工作流 | `.github/workflows/ci.yml` |
+| 开发日志 | `DEVELOPMENT_LOG.md` |
 | 项目说明 | `README.md` |
 | AI 使用说明 | `AI_USAGE.md` |
 | 许可证 | `LICENSE` |
@@ -36,10 +38,10 @@ MoonBit 生态在分发工具链、包和示例时，需要一个可靠、无依
 ```bash
 moon check
 moon test --target js
-moon run src/cmd --target js
+moon run src/cmd --target js -- 1.0.0-beta.2 1.0.0-beta.11
 ```
 
-当前结果：类型检查 0 错误，测试 5/5 通过，demo 输出符合 SemVer 规则。
+当前结果：类型检查 0 错误，测试 8/8 通过，CLI 输出符合 SemVer 规则。
 
 ## 6. 技术要点
 
