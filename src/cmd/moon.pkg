@@ -3,4 +3,5 @@ pkgtype(kind: "executable")
 import {
   "2200m-hh/moonbit-semver" @semver,
   "moonbitlang/core/argparse" @argparse,
+  "moonbitlang/core/env" @env,
 }

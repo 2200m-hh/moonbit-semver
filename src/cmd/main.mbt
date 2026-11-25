@@ -1,6 +1,9 @@
 fn show_pair(a_text : String, b_text : String) -> Unit {
   match @semver.compare_text(a_text, b_text) {
-    Err(e) => println("error: " + e)
+    Err(e) => {
+      println("error: " + e)
+      @env.exit(1)
+    }
     Ok(order) => {
       let symbol = if order < 0 { "<" } else if order > 0 { ">" } else { "==" }
       println("\{a_text}  \{symbol}  \{b_text}")

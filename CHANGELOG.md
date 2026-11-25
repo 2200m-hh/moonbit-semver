@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/).
 
 ### Fixed
 
+- **Correctness**: `split_char` now iterates in UTF-16 code-unit space, matching `unsafe_substring` and `String::length()`. Supplementary-plane characters (emoji) are no longer cut into lone surrogates, so error messages name the complete identifier. `find("+")` / `find("-")` already returned code-unit offsets and were left unchanged.
+- **Correctness**: `is_all_digits("")` now returns `false`, so an empty identifier is never treated as a numeric identifier during comparison.
+- **CLI**: invalid SemVer input now exits with status 1 (previously 0), so scripts and CI can detect failures. Valid input still exits 0.
 - **Correctness**: alphanumeric prerelease identifiers are now compared in true ASCII sort order. The implementation previously relied on MoonBit's built-in `String` ordering, which is length-first and therefore violates SemVer 2.0.0 section 11 (e.g. `1.0.0-alpha` was wrongly ordered *after* `1.0.0-beta`). `cmp_string` now compares code points element by element, independent of the compilation backend.
 - **Correctness**: version numbers beyond machine-integer range no longer overflow. Numeric components are now stored as canonical decimal strings and compared by length then lexicographic order. Previously `99999999999999999999999999999999999999.0.0` compared as *less than* `1.0.0`; it now correctly compares as greater. Applies to major/minor/patch and to numeric prerelease identifiers.
 
@@ -21,11 +24,13 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/).
 - `compare_text(String, String) -> Result[Int, String]` with side-specific errors.
 - CLI position arguments backed by `moonbitlang/core/argparse`, with `--help` / `--version`.
 - GitHub Actions workflow running type check, tests and demo.
-- 9 test groups covering validity helper, error reporting, large numeric identifiers, official precedence chain, comparison laws, ASCII ordering and build metadata (18 tests total).
+- 9 test groups covering validity helper, error reporting, large numeric identifiers, official precedence chain, comparison laws, ASCII ordering and build metadata.
+- 5 additional test groups covering UTF-16 splitting, supplementary-plane rejection, empty numeric fields, multiple leading zeros and defensive construction. 23 tests total.
 
 ### Changed
 
 - The demo is now a real CLI with default values instead of hardcoded output.
+- Test counts in README and SUBMISSION_INFO now match the actual test run (23).
 
 ## [0.1.0] - 2026-11-25
 
