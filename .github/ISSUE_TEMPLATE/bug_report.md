@@ -6,7 +6,7 @@ labels: bug
 assignees: ''
 ---
 
-##输入
+## 输入
 
 版本字符串或 API 调用：
 
