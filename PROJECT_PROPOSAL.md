@@ -11,7 +11,7 @@ MoonBit 生态在分发工具链、包和示例时，需要一个可靠、无依
 - 严格解析 `MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`；
 - 校验前导零、非法字符与空标识符；
 - 按 SemVer 2.0.0 正确比较优先级，build metadata 不参与比较；
-- 提供 README、API 说明、5 组测试与可运行 demo。
+- 提供 README、API 说明、8 组测试与可传参 CLI demo。
 
 ## 3. 非目标
 
