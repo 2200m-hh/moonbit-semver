@@ -49,6 +49,6 @@
 
 ```text
 moon check                 → Finished, 0 errors
-moon test --target js      → Total tests: 8, passed: 8, failed: 0
+moon test --target js      → Total tests: 23, passed: 23, failed: 0
 moon run src/cmd --target js -- 1.0.0-beta.2 1.0.0-beta.11 → 输出符合 SemVer 2.0.0
 ```

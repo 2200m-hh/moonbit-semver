@@ -47,7 +47,7 @@ moonbit-semver/
 
 ```bash
 moon check                 # 类型检查
-moon test --target js      # 运行测试（8 passed）
+moon test --target js      # 运行测试（23 passed）
 moon run src/cmd --target js
 moon run src/cmd --target js -- 1.0.0-beta.2 1.0.0-beta.11
 ```
