@@ -11,6 +11,13 @@
 // machine integer would silently overflow and corrupt comparison results for
 // very large versions. Canonical strings (no leading zeros) compare correctly
 // by length first, then lexicographically.
+//
+// Two notions of equality exist and must not be confused:
+//   - `a == b` is structural equality: every field must match, including
+//     build metadata.
+//   - `compare(a, b) == 0` is SemVer precedence equality: build metadata is
+//     ignored, as required by the specification.
+#derive(Eq, Debug)
 pub(all) struct Version {
   major : String
   minor : String
@@ -80,12 +87,12 @@ fn parse_identifiers(text : String, reject_leading_zero : Bool) -> Result[Array[
   let result : Array[String] = []
   for part in parts {
     if part.length() == 0 {
-      return Err("empty identifier")
+      return Err("empty identifier in: " + text)
     }
     let mut numeric = true
     for _, ch in part {
       if !is_ident_char(ch) {
-        return Err("invalid identifier character")
+        return Err("invalid character in identifier: " + part)
       }
       if !ch.is_ascii_digit() {
         numeric = false
@@ -141,7 +148,7 @@ pub fn parse(input : String) -> Result[Version, String] {
 
   let nums = split_char(core, '.')
   if nums.length() != 3 {
-    return Err("version core must have exactly three parts")
+    return Err("version core must have exactly three parts, got: " + core)
   }
   let major = match parse_uint(nums[0]) {
     Ok(n) => n
@@ -169,14 +176,32 @@ fn cmp_int(a : Int, b : Int) -> Int {
   }
 }
 
+// Compare identifier strings in ASCII sort order, as SemVer 2.0.0 requires.
+//
+// This must NOT use the built-in String comparison operators. In MoonBit they
+// order by length first and only fall back to code-unit order for equal
+// lengths, which would rank "beta" before "alpha" and "rc" before "beta".
+// That ordering is self-consistent, so the mistake is invisible to tests that
+// are derived from the implementation rather than from the specification.
+// Comparing code points element by element gives the required order and does
+// not depend on the target backend.
 fn cmp_string(a : String, b : String) -> Int {
-  if a < b {
-    -1
-  } else if a > b {
-    1
-  } else {
-    0
+  let a_chars = a.to_array()
+  let b_chars = b.to_array()
+  let a_len = a_chars.length()
+  let b_len = b_chars.length()
+  let n = if a_len < b_len { a_len } else { b_len }
+  for index = 0; index < n; index = index + 1 {
+    let ca = a_chars[index].to_int()
+    let cb = b_chars[index].to_int()
+    if ca < cb {
+      return -1
+    }
+    if ca > cb {
+      return 1
+    }
   }
+  cmp_int(a_len, b_len)
 }
 
 fn cmp_identifier(a : String, b : String) -> Int {

@@ -11,7 +11,7 @@
 - 按 SemVer 2.0.0 规则比较优先级：主版本/次版本/修订号逐项比较，预发布版本低于正式版本，数字标识符按数值比较，字母数字标识符按字典序比较。
 - 保留 build metadata，但按规范在比较时忽略它。
 - 数字分量用规范化字符串存储，任意长度都不溢出（SemVer 对数字无大小上限）。
-- 提供可传参的 CLI demo、9 组测试与 GitHub Actions CI。
+- 提供可传参的 CLI demo、18 组测试与 GitHub Actions CI。
 
 ## 目录结构
 
@@ -90,6 +90,7 @@ println(@moonbit-semver.compare_text("1.0.0-alpha", "1.0.0")) // Ok(-1)
 数据类型：
 
 ```moonbit
+#derive(Eq, Debug)
 pub(all) struct Version {
   major : String
   minor : String
@@ -98,6 +99,15 @@ pub(all) struct Version {
   build : Array[String]
 }
 ```
+
+`Version` 派生了 `Eq` 和 `Debug`，可直接比较与打印。注意两种「相等」的区别：
+
+- `v1 == v2` 是结构相等，build metadata 也参与比较；
+- `compare(v1, v2) == 0` 是 SemVer 优先级相等，按规范忽略 build metadata。
+
+例如 `1.0.0+build.1` 与 `1.0.0+build.2` 优先级相等（`compare` 返回 `0`），但结构不相等（`==` 返回 `false`）。
+
+ASCII 排序不依赖 MoonBit 内置的字符串比较运算符：标识符按码点逐位比较。这是为了严格满足规范第 11 条，同时避免不同后端实现差异。
 
 ## 边界与非目标
 
