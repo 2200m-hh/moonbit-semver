@@ -10,7 +10,8 @@
 - 校验数字标识符无前导零，预发布标识符字符集合法。
 - 按 SemVer 2.0.0 规则比较优先级：主版本/次版本/修订号逐项比较，预发布版本低于正式版本，数字标识符按数值比较，字母数字标识符按字典序比较。
 - 保留 build metadata，但按规范在比较时忽略它。
-- 提供可传参的 CLI demo、8 组测试与 GitHub Actions CI。
+- 数字分量用规范化字符串存储，任意长度都不溢出（SemVer 对数字无大小上限）。
+- 提供可传参的 CLI demo、9 组测试与 GitHub Actions CI。
 
 ## 目录结构
 
@@ -90,9 +91,9 @@ println(@moonbit-semver.compare_text("1.0.0-alpha", "1.0.0")) // Ok(-1)
 
 ```moonbit
 pub(all) struct Version {
-  major : Int
-  minor : Int
-  patch : Int
+  major : String
+  minor : String
+  patch : String
   pre : Array[String]
   build : Array[String]
 }

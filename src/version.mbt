@@ -6,10 +6,15 @@
 //   - precedence exactly follows the SemVer 2.0.0 specification;
 //   - build metadata is preserved but ignored when comparing versions.
 
+// Numeric components are stored as canonical decimal strings, not Int.
+// SemVer 2.0.0 puts no upper bound on numeric identifiers, so parsing into a
+// machine integer would silently overflow and corrupt comparison results for
+// very large versions. Canonical strings (no leading zeros) compare correctly
+// by length first, then lexicographically.
 pub(all) struct Version {
-  major : Int
-  minor : Int
-  patch : Int
+  major : String
+  minor : String
+  patch : String
   pre : Array[String]
   build : Array[String]
 }
@@ -43,21 +48,31 @@ fn is_ident_char(ch : Char) -> Bool {
   c == 45 || (c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122)
 }
 
-fn parse_uint(text : String) -> Result[Int, String] {
+fn parse_uint(text : String) -> Result[String, String] {
   if text.length() == 0 {
     return Err("empty numeric identifier")
   }
   if text.length() > 1 && text.has_prefix("0") {
     return Err("numeric identifier must not contain leading zeros: " + text)
   }
-  let mut value = 0
   for _, ch in text {
     if !ch.is_ascii_digit() {
       return Err("not a decimal number: " + text)
     }
-    value = value * 10 + ch.to_int() - '0'.to_int()
   }
-  Ok(value)
+  Ok(text)
+}
+
+// Compare two canonical decimal strings without overflow: longer means larger,
+// equal length falls back to lexicographic order (digits only, no leading zeros).
+fn cmp_number(a : String, b : String) -> Int {
+  if a.length() < b.length() {
+    -1
+  } else if a.length() > b.length() {
+    1
+  } else {
+    cmp_string(a, b)
+  }
 }
 
 fn parse_identifiers(text : String, reject_leading_zero : Bool) -> Result[Array[String], String] {
@@ -168,9 +183,7 @@ fn cmp_identifier(a : String, b : String) -> Int {
   let a_numeric = is_all_digits(a)
   let b_numeric = is_all_digits(b)
   if a_numeric && b_numeric {
-    let ai = parse_uint(a).unwrap()
-    let bi = parse_uint(b).unwrap()
-    cmp_int(ai, bi)
+    cmp_number(a, b)
   } else if a_numeric {
     -1
   } else if b_numeric {
@@ -213,15 +226,15 @@ fn cmp_pre(a : Array[String], b : Array[String]) -> Int {
 /// Returns -1 when a < b, 0 when a == b, and 1 when a > b.
 /// Build metadata is ignored.
 pub fn compare(a : Version, b : Version) -> Int {
-  let c1 = cmp_int(a.major, b.major)
+  let c1 = cmp_number(a.major, b.major)
   if c1 != 0 {
     return c1
   }
-  let c2 = cmp_int(a.minor, b.minor)
+  let c2 = cmp_number(a.minor, b.minor)
   if c2 != 0 {
     return c2
   }
-  let c3 = cmp_int(a.patch, b.patch)
+  let c3 = cmp_number(a.patch, b.patch)
   if c3 != 0 {
     return c3
   }

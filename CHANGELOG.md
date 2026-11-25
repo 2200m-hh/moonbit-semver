@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Correctness**: version numbers beyond machine-integer range no longer overflow. Numeric components are now stored as canonical decimal strings and compared by length then lexicographic order. Previously `99999999999999999999999999999999999999.0.0` compared as *less than* `1.0.0`; it now correctly compares as greater. Applies to major/minor/patch and to numeric prerelease identifiers.
+
 ### Added
 
 - `is_valid(String) -> Bool` for quick SemVer validation.

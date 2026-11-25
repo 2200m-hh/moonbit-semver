@@ -4,9 +4,9 @@ fn must_parse(text : String) -> @moonbit-semver.Version {
 
 test "parse simple version" {
   let v = must_parse("1.2.3")
-  assert_eq(v.major, 1)
-  assert_eq(v.minor, 2)
-  assert_eq(v.patch, 3)
+  assert_eq(v.major, "1")
+  assert_eq(v.minor, "2")
+  assert_eq(v.patch, "3")
   assert_eq(v.pre.length(), 0)
   assert_eq(v.build.length(), 0)
 }
@@ -68,6 +68,26 @@ test "large numeric identifiers keep precedence" {
     @moonbit-semver.compare_text(
       "999999999999999999999.0.0",
       "1000000000000000000000.0.0",
+    ).unwrap(),
+    -1,
+  )
+}
+
+test "numbers beyond Int range do not overflow" {
+  let huge = "99999999999999999999999999999999999999.0.0"
+  assert_true(@moonbit-semver.is_valid(huge))
+  assert_eq(
+    @moonbit-semver.compare_text(huge, "1.0.0").unwrap(),
+    1,
+  )
+  assert_eq(
+    @moonbit-semver.compare_text("1.0.0", huge).unwrap(),
+    -1,
+  )
+  assert_eq(
+    @moonbit-semver.compare_text(
+      "1.0.0-99999999999999999999999999999999",
+      "1.0.0-100000000000000000000000000000000",
     ).unwrap(),
     -1,
   )

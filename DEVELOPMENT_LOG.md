@@ -15,7 +15,7 @@
 ## 加固轮（feat/hardening → main）
 
 1. 新增 `is_valid` 与 `compare_text` 两个公开 API，降低调用方样板代码。
-2. 新增 3 组边界测试：合法性判断、错误定位到大数标识符，测试总数升至 8 组。
+2. 新增 3 组边界测试：合法性判断、错误定位到大数标识符，测试总数升至 8 组；后续大数溢出修复再加 1 组，共 9 组。
 3. 把写死的 demo 升级为基于 `moonbitlang/core/argparse` 的 CLI，支持位置参数、`--help`、`--version`。
 4. 新增 GitHub Actions CI：类型检查、测试、CLI 演示三步验证。
 5. 在独立分支完成改动并合并回 main，形成可追踪的 Pull Request 记录。
