@@ -26,3 +26,7 @@
 - [ ] 创建 Issue #2：一个功能建议（须在 SemVer 范畴内）。
 - [ ] 在 GitHub 上为已合并的加固提交补充 PR 描述与 review 记录（本地已保留 --no-ff 合并提交）。
 - [ ] 在 PR 中保留 review 与 commit 记录，作为持续开发证据。
+
+## PR 备注
+
+本分支补充 README 的赛事提交说明，作为可追踪 Pull Request 记录。
