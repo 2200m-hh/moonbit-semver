@@ -11,7 +11,7 @@ MoonBit 生态在分发工具链、包和示例时，需要一个可靠、无依
 - 严格解析 `MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`；
 - 校验前导零、非法字符与空标识符；
 - 按 SemVer 2.0.0 正确比较优先级，build metadata 不参与比较；
-- 提供 README、API 说明、8 组测试与可传参 CLI demo。
+- 提供 README、API 说明、9 组测试与可传参 CLI demo。
 
 ## 3. 非目标
 
@@ -41,7 +41,7 @@ moon test --target js
 moon run src/cmd --target js -- 1.0.0-beta.2 1.0.0-beta.11
 ```
 
-当前结果：类型检查 0 错误，测试 8/8 通过，CLI 输出符合 SemVer 规则。
+当前结果：类型检查 0 错误，测试 9/9 通过，CLI 输出符合 SemVer 规则。
 
 ## 6. 技术要点
 
