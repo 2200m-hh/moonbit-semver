@@ -29,8 +29,13 @@ pub(all) struct Version {
 fn split_char(text : String, sep : Char) -> Array[String] {
   let parts : Array[String] = []
   let mut start = 0
-  for index, ch in text {
-    if ch == sep {
+  // `iter2`'s index counts characters, but `unsafe_substring` and `length()`
+  // work in UTF-16 code units. Mixing the two cuts supplementary-plane
+  // characters (emoji, etc.) into lone surrogates. Iterate in code-unit space
+  // instead. The separator must be a BMP character; this module only uses '.'.
+  let sep_code = sep.to_int()
+  for index = 0; index < text.length(); index = index + 1 {
+    if text.unsafe_get(index).to_int() == sep_code {
       parts.push(text.unsafe_substring(start=start, end=index))
       start = index + 1
     }
@@ -219,6 +224,9 @@ fn cmp_identifier(a : String, b : String) -> Int {
 }
 
 fn is_all_digits(text : String) -> Bool {
+  if text.length() == 0 {
+    return false
+  }
   for _, ch in text {
     if !ch.is_ascii_digit() {
       return false
@@ -250,6 +258,10 @@ fn cmp_pre(a : Array[String], b : Array[String]) -> Int {
 /// Compare two versions according to SemVer precedence.
 /// Returns -1 when a < b, 0 when a == b, and 1 when a > b.
 /// Build metadata is ignored.
+///
+/// Precondition: both values should come from `parse`. The fields must be
+/// canonical non-empty decimal strings and non-empty ASCII identifiers.
+/// Directly constructed `Version` values are outside the supported contract.
 pub fn compare(a : Version, b : Version) -> Int {
   let c1 = cmp_number(a.major, b.major)
   if c1 != 0 {
@@ -267,6 +279,9 @@ pub fn compare(a : Version, b : Version) -> Int {
 }
 
 /// Render a version back to its canonical string form.
+///
+/// Precondition: `v` should come from `parse`; directly constructed values
+/// with non-canonical fields may render a string that `parse` would reject.
 pub fn to_string(v : Version) -> String {
   let mut out = "\{v.major}.\{v.minor}.\{v.patch}"
   if v.pre.length() > 0 {
