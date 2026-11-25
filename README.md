@@ -112,8 +112,9 @@ pub(all) struct Version {
 
 ## 提交前清单（给参赛者）
 
-1. 将 `moon.mod` 中的 `repository` 和本文中的占位 GitHub ID 替换为你的真实 ID。
+1. 将 `moon.mod` 中的 `repository` 和本文中的占位 GitHub ID 替换为你的真实 ID；建议把 `name` 的 owner `hackathon` 也换成你的 ID，并同步修改 `src/cmd/moon.pkg` 的 import 后重跑 `moon check`。
 2. 在 GitHub 新建公开仓库 `moonbit-semver`，把本地仓库推送上去。
-3. 在仓库中创建 2 个 Issue（一个 bug 报告、一个功能建议）和 1 个 Pull Request（例如补充测试用例），保留可追踪记录。
+3. 在 GitHub 上创建 2 个 Issue（一个 bug 报告、一个功能建议）和 1 个真实 Pull Request（例如补充测试用例），保留 review 与合并记录。
 4. 按赛事官网飞书表单报名，填入公开仓库地址与 `PROJECT_PROPOSAL.md`。
 5. 加入赛事微信群并把群昵称改为你的 GitHub ID（影响奖金发放）。
+6. 完整规则核对见 `E:\WorkBuddy\COMPLIANCE_CHECK.md`；不要一稿多投，不要用他人作品。

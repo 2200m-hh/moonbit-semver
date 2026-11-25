@@ -29,10 +29,10 @@
    git push -u origin main
    ```
 
-3. 推送前把 `moon.mod` 的 `repository` 字段和 `README.md` 里的 `your-github-id` 替换成你的真实 GitHub ID。
+3. 推送前替换占位 ID：`moon.mod` 的 `repository`，以及 `README.md` 里的 `your-github-id`。**建议同时把 `moon.mod` 的 `name = "hackathon/moonbit-semver"` 中的 `hackathon` 改成你的真实 GitHub ID**——若改了 `name`，必须同步改 `src/cmd/moon.pkg` 里的 `import { "hackathon/moonbit-semver" @semver }`，然后跑一次 `moon check` 确认通过。
 4. 打开飞书报名表，填入：姓名、GitHub ID、公开仓库地址、一页项目说明（直接用 `PROJECT_PROPOSAL.md` 的内容）。
 5. 加入赛事微信群，**把群昵称改成你的 GitHub ID**。官网明确写：不改昵称会影响奖金发放。
-6. 在仓库里创建 2 个 Issue 和 1 个 PR，保留开发记录（模板已放在 `.github/ISSUE_TEMPLATE/`）。
+6. 在 GitHub 仓库里创建 2 个 Issue（模板已放在 `.github/ISSUE_TEMPLATE/`），再从 main 建一个分支做一个小改进并提交 PR，保留 review 与合并记录。本地已有一条 `--no-ff` 合并记录，但 GitHub 上需要真实的 PR 对象来对应赛事「保留 PR」的要求。
 7. 等审核。通过审核后有「启动支持 150 元」，验收通过后「完成支持 350 元」。
 
 ## 3. 需要注意的规则
@@ -41,6 +41,7 @@
 - 验收标准：MoonBit 为主、仓库公开、有 README/可运行示例/测试、开源合规、AI 可解释。本项目全部满足。
 - 已有连续提交与一次独立分支的加固合并，开发轨迹可追踪。
 - 奖金涉及实名与收款，必须由你本人完成，我无法代做。
+- 三场比赛的完整规则核对表见 `E:\WorkBuddy\COMPLIANCE_CHECK.md`；另外两场文案赛未明确 AI 立场，投稿前请自行改写确认原创。
 
 ## 4. 本地验证结果（已完成）
 
