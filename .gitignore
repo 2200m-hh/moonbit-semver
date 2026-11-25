@@ -4,3 +4,4 @@ target/
 *.wat
 .DS_Store
 *.log
+*.generated.mbti
