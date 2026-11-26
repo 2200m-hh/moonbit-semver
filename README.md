@@ -11,7 +11,7 @@
 - 按 SemVer 2.0.0 规则比较优先级：主版本/次版本/修订号逐项比较，预发布版本低于正式版本，数字标识符按数值比较，字母数字标识符按字典序比较。
 - 保留 build metadata，但按规范在比较时忽略它。
 - 数字分量用规范化字符串存储，任意长度都不溢出（SemVer 对数字无大小上限）。
-- 提供可传参的 CLI demo、18 组测试与 GitHub Actions CI。
+- 提供可传参的 CLI demo、25 组测试与 GitHub Actions CI。
 
 ## 目录结构
 
@@ -47,7 +47,7 @@ moonbit-semver/
 
 ```bash
 moon check                 # 类型检查
-moon test --target js      # 运行测试（23 passed）
+moon test --target js      # 运行测试（25 passed）
 moon run src/cmd --target js
 moon run src/cmd --target js -- 1.0.0-beta.2 1.0.0-beta.11
 ```

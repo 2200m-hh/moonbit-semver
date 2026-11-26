@@ -247,3 +247,42 @@ test "errors name the offending input" {
     Err("left: version core must have exactly three parts, got: 1.2"),
   )
 }
+
+test "non-ASCII before a separator keeps error fragments intact" {
+  // `find` locates separators and `unsafe_substring` slices by UTF-16 code
+  // unit. A supplementary-plane character before '-' or '+' must not cause a
+  // surrogate pair to be cut in half, and the reported fragment must be whole.
+  assert_eq(
+    @moonbit-semver.parse("1.2.3-😀+build"),
+    Err("invalid character in identifier: 😀"),
+  )
+  assert_eq(
+    @moonbit-semver.parse("1.2.3-😀.beta+build"),
+    Err("invalid character in identifier: 😀"),
+  )
+  assert_eq(
+    @moonbit-semver.parse("1.2.3-a+😀"),
+    Err("invalid character in identifier: 😀"),
+  )
+  assert_eq(
+    @moonbit-semver.parse("1.2.3+build-😀"),
+    Err("invalid character in identifier: build-😀"),
+  )
+  assert_eq(
+    @moonbit-semver.parse("😀.2.3+build"),
+    Err("not a decimal number: 😀"),
+  )
+}
+
+test "numeric identifiers rank below alphanumeric ones" {
+  // Spec item 11.4.3: numeric identifiers always have lower precedence than
+  // alphanumeric ones, even when the alphanumeric part starts with '-'.
+  assert_eq(cmp_text("1.0.0-0", "1.0.0--"), -1)
+  assert_eq(cmp_text("1.0.0-1", "1.0.0-a"), -1)
+  assert_eq(cmp_text("1.0.0-999", "1.0.0-Z"), -1)
+  assert_eq(cmp_text("1.0.0--", "1.0.0-0"), 1)
+  // Among alphanumeric identifiers, ASCII order applies: '-' (45) < uppercase
+  // (65-90) < lowercase (97-122).
+  assert_eq(cmp_text("1.0.0--", "1.0.0-A"), -1)
+  assert_eq(cmp_text("1.0.0-A", "1.0.0-a"), -1)
+}
