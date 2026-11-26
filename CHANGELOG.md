@@ -25,12 +25,13 @@ and this project adheres to [Semantic Versioning 2.0.0](https://semver.org/).
 - CLI position arguments backed by `moonbitlang/core/argparse`, with `--help` / `--version`.
 - GitHub Actions workflow running type check, tests and demo.
 - 9 test groups covering validity helper, error reporting, large numeric identifiers, official precedence chain, comparison laws, ASCII ordering and build metadata.
-- 5 additional test groups covering UTF-16 splitting, supplementary-plane rejection, empty numeric fields, multiple leading zeros and defensive construction. 23 tests total.
+- 5 additional test groups covering UTF-16 splitting, supplementary-plane rejection, empty numeric fields, multiple leading zeros and defensive construction.
+- 2 spec-conformance test groups: non-ASCII characters before `-` / `+` separators keep error fragments intact, and numeric identifiers rank below alphanumeric ones per spec item 11.4.3. 25 tests total.
 
 ### Changed
 
 - The demo is now a real CLI with default values instead of hardcoded output.
-- Test counts in README and SUBMISSION_INFO now match the actual test run (23).
+- Test counts in README, PROJECT_PROPOSAL and AI_USAGE now match the actual test run (25).
 
 ## [0.1.0] - 2026-11-25
 
